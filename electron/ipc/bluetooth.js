@@ -1,6 +1,7 @@
 
 const { app, BrowserWindow, ipcMain } = require('electron')
 function blueIpc({ mainWindow }) {
+  console.log("🚀 - file: bluetooth.js:4 - mainWindow:", mainWindow)
   let bluetoothPinCallback
   let selectBluetoothCallback
   mainWindow.webContents.on('select-bluetooth-device', (event, deviceList, callback) => {
@@ -31,4 +32,8 @@ function blueIpc({ mainWindow }) {
     // Send a message to the renderer to prompt the user to confirm the pairing.
     mainWindow.webContents.send('bluetooth-pairing-request', details)
   })
+}
+
+module.exports = {
+  blueIpc
 }

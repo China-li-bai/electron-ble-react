@@ -7,30 +7,18 @@
 // Electron参考文档 https://www.electronjs.org/docs
 
 const { app, BrowserWindow, nativeImage } = require('electron')
-
 const path = require('path')
 const reload = require("electron-reloader")
-// const url = require('url');
+const { blueIpc } = require("./electron/ipc")
 
 try {
   reload(module)
 } catch (error) {
-  console.error("热更新加载失败：",error)
+  console.error("热更新加载失败：", error)
 }
-
-
-
-
 
 app.allowRendererProcessReuse = true;
 
-
-
-// This method will be called when Electron has finished
-
-// initialization and is ready to create browser windows.
-
-// Some APIs can only be used after this event occurs.
 app.whenReady().then(() => {
   createWindow()
   app.on('activate', function () {
@@ -46,9 +34,9 @@ app.on('window-all-closed', function () {
 
 
 
-	// In this file you can include the rest of your app's specific main process
+// In this file you can include the rest of your app's specific main process
 
-	// code. You can also put them in separate files and require them here.
+// code. You can also put them in separate files and require them here.
 
 
 function createWindow() {
@@ -71,7 +59,7 @@ function createWindow() {
 
       webSecurity: false, // 禁用同源策略
 
-      preload: path.join(__dirname, 'preload.js'),
+      preload: path.join(__dirname, './electron/preload/index.js'),
 
       nodeIntegration: true // 是否启用node集成 渲染进程的内容有访问node的能力,建议设置为true, 否则在render页面会提示node找不到的错误
 
@@ -91,11 +79,13 @@ function createWindow() {
 
   // }));
 
-
+  blueIpc({ mainWindow })
   // 因为我们是加载的react生成的页面，并不是静态页面
   // 所以loadFile换成loadURL。
   // 加载应用 --开发阶段  需要运行 yarn start
   mainWindow.loadURL('http://localhost:3001');
+  // 在启动的时候打开DevTools
+  mainWindow.webContents.openDevTools()
 
   // 解决应用启动白屏问题
 
@@ -106,18 +96,5 @@ function createWindow() {
     mainWindow.focus();
 
   });
-
-  // 当窗口关闭时发出。在你收到这个事件后，你应该删除对窗口的引用，并避免再使用它。
-
-  mainWindow.on('closed', () => {
-
-    mainWindow = null;
-
-  });
-
-
-  // 在启动的时候打开DevTools
-
-  mainWindow.webContents.openDevTools()
-
+  return mainWindow
 }

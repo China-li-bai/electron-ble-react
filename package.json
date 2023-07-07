@@ -26,7 +26,7 @@
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "electron": "electron .",
+    "electron": "electron --inspect .",
     "dev": "yarn start && yarn electron",
     "package": "electron-packager . bleak-electron-app --platform=win32 --arch=x64 --overwrite --icon=./public/favicon.ico"
   },
@@ -49,8 +49,10 @@
     ]
   },
   "devDependencies": {
+    "@types/electron": "^1.6.10",
     "electron": "^25.2.0",
     "electron-packager": "^17.1.1",
     "electron-reloader": "^1.2.3"
-  }
+  },
+  "types": "electron.d.ts"
 }
